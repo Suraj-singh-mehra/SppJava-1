@@ -1,5 +1,6 @@
-package com.example.spp.models;
+package com.example.spp.rest;
 
+import com.example.spp.models.Item;
 import lombok.Getter;
 import lombok.Setter;
 

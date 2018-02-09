@@ -28,9 +28,6 @@ public class Item implements Serializable{
     @Column
     private String category;
 
-    @Column
-    private Date expireDate;
-
     @NotNull
     @Column
     private int price;

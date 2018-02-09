@@ -2,7 +2,7 @@ package com.example.spp.service;
 
 import com.example.spp.converter.DtoToItemConverter;
 import com.example.spp.dto.AddNewItemDto;
-import com.example.spp.models.DBResponse;
+import com.example.spp.rest.DBResponse;
 import com.example.spp.models.Item;
 import com.example.spp.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Locale;
 
 @Service
 @Transactional
-public class TestBDService {
+public class TestBDItemsService {
 
     @Autowired
     private ItemRepository itemRepository;
@@ -45,13 +45,6 @@ public class TestBDService {
         item.setPrice(newItemDto.getPrice());
         item.setName(newItemDto.getName());
         item.setCategory(newItemDto.getCategory());
-        DateFormat format = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
-        try {
-            Date date = new java.sql.Date(format.parse(newItemDto.getExpiryDate()).getTime());
-            item.setExpireDate(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
         itemRepository.save(item);
     }
 
