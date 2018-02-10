@@ -18,7 +18,7 @@ public class Company implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private int id;
+    private long id;
 
     @NotNull
     @Column
