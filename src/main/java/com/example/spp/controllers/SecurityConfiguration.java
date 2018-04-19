@@ -29,11 +29,13 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String[] allowedUrlsForPost = new String[]{ "/auth/login",
-            "/auth/registration", "/auth/confirm" , "/addNewItem"};
+            "/auth/registration", "/auth/confirm" , "/addNewItem", "/addNewUser", "/addNewCompany", "/addNewStorage"};
+    private static final String[] allowedUrlsForPut = new String[]{ "/updateItem", "/updateUser",
+            "/updateStorage", "/updateCompany" };
+    private static final String[] allowedUrlsForDelete = new String[]{ "/deleteCompany/*", "/deleteStorage/*",
+            "/deleteUser/*", "/deleteItem/*"};
     private static final String[] allowedUrlsForGet = new String[]{ "/getAllDataFromItems",
-            "/project/comments", "/project/rewards", "/project/project_goals", "/project/last-created",
-            "/project/successfully-financed", "/donate/the-biggest", "/project/search",
-            "/donate/user-biography", "/tag/all"};
+            "/getAllDataFromUsers", "/getAllDataFromCompanies", "/getAllDataFromStorage"};
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
     private final UserDetailsService userDetailsService;
@@ -79,6 +81,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers(HttpMethod.POST, allowedUrlsForPost)
                 .antMatchers(HttpMethod.GET, allowedUrlsForGet)
+                .antMatchers(HttpMethod.PUT, allowedUrlsForPut)
+                .antMatchers(HttpMethod.DELETE, allowedUrlsForDelete)
                 .antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
