@@ -32,6 +32,15 @@ public class User implements Serializable {
     @Column
     private String password;
 
+    @Column
+    private String biography;
+
+    @Column
+    private String imageUrl;
+
+    @Column
+    private String location;
+
     @NotNull
     @Column
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,7 @@
 package com.example.spp.dto;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,14 +10,11 @@ public class AddNewItemDto {
     @NotNull
     private long id;
 
-    @NotNull
+    @NotEmpty
     private String name;
 
-    @NotNull
+    @NotEmpty
     private String category;
-
-    @NotNull
-    private String expiryDate;
 
     @NotNull
     private int price;
