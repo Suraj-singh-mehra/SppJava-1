@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class AbstractDocumentBuilder implements DocumentBuilder {
     protected final String ARGS_ERROR_MESSAGE = "Invalid arguments";
 
-    private final String PDF_WATER_MARK = "Evtushenko Tatyana, Filipuk Dmitry, Akulchik Vladimir";
+    private final String PDF_WATER_MARK = "Tsyulia Lisa, Maria Melnik, Shautsova Tamara";
     private final ExcelBuilder excelBuilder;
     private final CsvBuilder csvBuilder;
     private final PdfBuilder pdfBuilder;
