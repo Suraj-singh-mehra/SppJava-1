@@ -76,7 +76,7 @@ public class EmployeeDocumentBuilder extends AbstractDocumentBuilder {
             item.add(user.getEmail());
             item.add(user.getBiography());
             item.add(user.getRole().toString());
-            item.add(String.format("%.2f", user.getSalary()));
+            item.add(String.format("%s$", user.getSalary()));
             data.add(item);
         }
 
