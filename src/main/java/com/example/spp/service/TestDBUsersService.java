@@ -3,6 +3,7 @@ package com.example.spp.service;
 import com.example.spp.converter.DtoToUserConverter;
 import com.example.spp.dto.AddNewUserDto;
 import com.example.spp.models.User;
+import com.example.spp.models.enums.UserRole;
 import com.example.spp.models.enums.UserStatus;
 import com.example.spp.repository.UserRepository;
 import com.example.spp.rest.DBUsersResponse;
@@ -41,6 +42,7 @@ public class TestDBUsersService {
         user.setEmail(newUserDto.getEmail());
         user.setFullname(newUserDto.getFullname());
         user.setSalary(newUserDto.getSalary());
+        user.setRole(UserRole.valueOf(newUserDto.getRole()));
         user.setStatus(UserStatus.valueOf(newUserDto.getStatus()));
         userRepository.save(user);
     }
