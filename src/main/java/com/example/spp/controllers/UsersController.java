@@ -51,7 +51,6 @@ public class UsersController {
     }
 
     @GetMapping(value = "/user/user-info/{id}")
-    @ResponseStatus(value = HttpStatus.OK)
     public BiographyDto getUserInfo(@PathVariable Long id) {
         return convertToBiographyDto(userService.findById(id));
     }
