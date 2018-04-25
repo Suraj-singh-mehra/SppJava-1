@@ -1,6 +1,5 @@
 package com.example.spp.service;
 
-import com.example.spp.dto.BiographyDto;
 import com.example.spp.models.User;
 import com.example.spp.models.enums.UserRole;
 import com.example.spp.models.enums.UserStatus;
