@@ -49,23 +49,6 @@ public class EmployeeDocumentBuilder extends AbstractDocumentBuilder {
     protected List<List<String>> getDocumentData(Object[] args) {
         List<List<String>> data = new ArrayList<>();
 
-        if (args.length < 1) {
-            try {
-                throw new Exception("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (!(args[0] instanceof Long)) {
-            try {
-                throw new Exception(ARGS_ERROR_MESSAGE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        Long branchId = (Long)args[0];
         List<User> users;
 
         users = userRepository.findAll();
