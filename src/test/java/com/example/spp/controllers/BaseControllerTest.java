@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestConfigurationClass.class})
 @AutoConfigureMockMvc
-public class BaseControllerTest {
+public abstract class BaseControllerTest {
     @Autowired
     MockMvc mockMvc;
 }
