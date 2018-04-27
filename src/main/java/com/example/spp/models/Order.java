@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order implements Serializable {
@@ -18,14 +18,14 @@ public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private int id;
+    private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User driver;
+    @JoinColumn( name = "user_id" )
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "storage_id")
+    @JoinColumn
     private Storage storage;
 
     @NotNull
@@ -33,10 +33,18 @@ public class Order implements Serializable {
     private int totalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "item_id")
+    @JoinColumn
     private Item item;
 
     @NotNull
     @Column
     private int amount;
+
+    @NotNull
+    @Column
+    private String date;
+
+    @NotNull
+    @Column
+    private boolean wasThere;
 }
