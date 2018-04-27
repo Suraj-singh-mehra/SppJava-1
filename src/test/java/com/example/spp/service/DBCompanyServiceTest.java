@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import javax.persistence.Convert;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,24 @@ public class DBCompanyServiceTest extends BaseServiceTest{
     }
 
     @Test
+    public void getCompaniesActualData() throws Exception {
+        DBCompanyResponse response = companyService.getCompanies();
+
+        Company comp1 = new Company();
+        comp1.setName("SPP");
+        comp1.setEmail("masha.melnik@yandex.by");
+        Company comp2 = new Company();
+        comp2.setName("bla-bla");
+        comp2.setEmail("test@test.com");
+
+        List<Company> companies = new ArrayList<>();
+        companies.add(comp1);
+        companies.add(comp2);
+
+        assertEquals(companies, response.getItems());
+    }
+
+    @Test
     public void getCompaniesFailed() throws Exception {
         DBCompanyResponse response = companyService.getCompanies();
         assertNotEquals(0, response.getTotalItems());
@@ -64,6 +83,15 @@ public class DBCompanyServiceTest extends BaseServiceTest{
         newCompany.setEmail("masha.melnik@yandex.by");
 
         assertFalse(companyService.addNewCompany(newCompany));
+    }
+
+    @Test
+    public void addNewCompanyWithEmptyContent() throws Exception {
+        AddNewCompanyDto newCompany = new AddNewCompanyDto();
+        newCompany.setName("");
+        newCompany.setEmail("");
+
+        assertTrue(companyService.addNewCompany(newCompany));
     }
 
     @Test

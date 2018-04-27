@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,8 +70,7 @@ public class AuthenticationControllerTest extends BaseControllerTest {
 
     }
 
-    @Test
-    @Ignore
+    @Test(expected = NestedServletException.class)
     public void login() throws Exception {
         LoginRequestDto dto = new LoginRequestDto();
         dto.setPassword("12345678");
@@ -83,6 +83,14 @@ public class AuthenticationControllerTest extends BaseControllerTest {
                 .content(json);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void logout() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = post("/auth/logout")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isUnauthorized());
     }
 
 }

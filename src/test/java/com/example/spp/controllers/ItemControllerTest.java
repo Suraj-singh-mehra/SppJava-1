@@ -1,6 +1,7 @@
 package com.example.spp.controllers;
 
 import com.example.spp.dto.AddNewItemDto;
+import com.example.spp.dto.AddNewStorageDto;
 import com.example.spp.models.Item;
 import com.example.spp.repository.ItemRepository;
 import com.example.spp.service.TestBDItemsService;
@@ -66,20 +67,47 @@ public class ItemControllerTest extends BaseControllerTest{
     }
 
     @Test
-        public void addNewItem() throws Exception {
-            AddNewItemDto addNewItemDto = new AddNewItemDto();
-            addNewItemDto.setName("savychkin");
-            addNewItemDto.setCategory("milk");
-            addNewItemDto.setPrice(1000);
-            addNewItemDto.setId(1);
+    public void getItemsBadRequest() throws Exception {
 
-            String json = mapper.writeValueAsString(addNewItemDto);
-            MockHttpServletRequestBuilder requestBuilder = post("/addNewItem")
-                    .content(json)
-                    .contentType(MediaType.APPLICATION_JSON);
-            mockMvc.perform(requestBuilder)
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$", Matchers.equalTo(true)));
+        MockHttpServletRequestBuilder requestBuilder = get("/getAllDataFromItems")
+                .param("_page", "test")
+                .param("_limit", "10")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void addNewItem() throws Exception {
+        AddNewItemDto addNewItemDto = new AddNewItemDto();
+        addNewItemDto.setName("savychkin");
+        addNewItemDto.setCategory("milk");
+        addNewItemDto.setPrice(1000);
+        addNewItemDto.setId(1);
+
+        String json = mapper.writeValueAsString(addNewItemDto);
+        MockHttpServletRequestBuilder requestBuilder = post("/addNewItem")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.equalTo(true)));
+    }
+
+    @Test
+    public void addNewItemWrongContent() throws Exception {
+        AddNewStorageDto addNewStorageDto = new AddNewStorageDto();
+        addNewStorageDto.setAddress("grodo");
+        addNewStorageDto.setCapacity(1000);
+        addNewStorageDto.setId(1);
+
+
+        String json = mapper.writeValueAsString(addNewStorageDto);
+        MockHttpServletRequestBuilder requestBuilder = post("/addNewItem")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -104,6 +132,14 @@ public class ItemControllerTest extends BaseControllerTest{
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteItemWrongPath() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = delete("/delete_item/1")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isUnauthorized());
     }
 
 }

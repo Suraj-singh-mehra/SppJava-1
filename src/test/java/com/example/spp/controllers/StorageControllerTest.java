@@ -65,10 +65,38 @@ public class StorageControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void getStorageBadRequest() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/getAllDataFromStorage")
+                .param("_page", "test")
+                .param("_limit", "10")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
     public void addNewStorage() throws Exception {
         AddNewStorageDto addNewStorageDto = new AddNewStorageDto();
         addNewStorageDto.setAddress("grodo");
         addNewStorageDto.setCapacity(1000);
+        addNewStorageDto.setId(1);
+
+        String json = mapper.writeValueAsString(addNewStorageDto);
+        MockHttpServletRequestBuilder requestBuilder = post("/addNewStorage")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.equalTo(true)));
+
+    }
+
+    @Test
+    public void addNewStorageEmptyData() throws Exception {
+        AddNewStorageDto addNewStorageDto = new AddNewStorageDto();
+        addNewStorageDto.setAddress("");
+        addNewStorageDto.setCapacity(0);
         addNewStorageDto.setId(1);
 
         String json = mapper.writeValueAsString(addNewStorageDto);
@@ -97,11 +125,35 @@ public class StorageControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void updateStorageWrongPath() throws Exception {
+        AddNewStorageDto addNewStorageDto = new AddNewStorageDto();
+        addNewStorageDto.setCapacity(4);
+        addNewStorageDto.setAddress("minsk");
+        addNewStorageDto.setId(1);
+
+        String json = mapper.writeValueAsString(addNewStorageDto);
+        MockHttpServletRequestBuilder requestBuilder = put("/update_storage")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void deleteStorage() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = delete("/deleteStorage/1")
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void deleteStorageWrongPath() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = delete("/delete_storage/1")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isUnauthorized());
 
     }
 }

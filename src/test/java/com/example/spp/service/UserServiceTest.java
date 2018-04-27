@@ -40,7 +40,8 @@ public class UserServiceTest extends BaseServiceTest{
         when(userRepository.findAll())
                 .thenReturn(users);
         when(userRepository.save(any(User.class))).thenReturn(null);
-        when(userRepository.findOne(any(Long.class))).thenReturn(user1);
+        when(userRepository.findOne(100L)).thenReturn(null);
+        when(userRepository.findOne(1L)).thenReturn(user1);
         when(userRepository.findByEmail(any(String.class))).thenReturn(user1);
     }
 
@@ -64,9 +65,35 @@ public class UserServiceTest extends BaseServiceTest{
     }
 
     @Test
+    public void createWithEmptyContent() throws Exception {
+        User newUser = userService.create("", "", "");
+        assertEquals("", newUser.getFullname());
+        assertEquals("", newUser.getEmail());
+    }
+
+    @Test
+    public void createNoEmpty() throws Exception {
+        User newUser = userService.create("New", "new", "new@email.com");
+        assertNotEquals("", newUser.getFullname());
+        assertNotEquals("", newUser.getEmail());
+    }
+
+    @Test
     public void findById() throws Exception {
         User user = userService.findById(1L);
         assertEquals(user.getEmail(), "first@email.com");
+    }
+
+    @Test
+    public void findByNonExistingId() throws Exception {
+        User user = userService.findById(100L);
+        assertEquals(null, user);
+    }
+
+    @Test
+    public void findByIdIsRight() throws Exception {
+        User user = userService.findById(1L);
+        assertNotEquals(user.getEmail(), "");
     }
 
 }
