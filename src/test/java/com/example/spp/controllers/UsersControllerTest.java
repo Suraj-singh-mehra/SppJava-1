@@ -79,12 +79,32 @@ public class UsersControllerTest extends BaseControllerTest{
     public void getUsers() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = get("/getAllDataFromUsers")
                 .param("_page", "1")
+                .param("_limit", "5")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getUsersActualData() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/getAllDataFromUsers")
+                .param("_page", "1")
                 .param("_limit", "10")
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].email", Matchers.equalTo("first@email.com")))
                 .andExpect(jsonPath("$[1].email", Matchers.equalTo("second@email.com")));
+    }
+
+    @Test
+    public void getUsersFailed() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/getAllDataFromUsers")
+                .param("_page", "test")
+                .param("_limit", "10")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -125,6 +145,24 @@ public class UsersControllerTest extends BaseControllerTest{
     }
 
     @Test
+    public void updateUserBlaBLa() throws Exception {
+        AddNewUserDto addNewUserDto = new AddNewUserDto();
+        addNewUserDto.setStatus("INACTIVE");
+        addNewUserDto.setSalary(5000);
+        addNewUserDto.setRole("ROLE_DRIVER");
+        addNewUserDto.setFullname("test");
+        addNewUserDto.setEmail("some@email.com");
+        addNewUserDto.setId(6);
+
+        String json = mapper.writeValueAsString(addNewUserDto);
+        MockHttpServletRequestBuilder requestBuilder = put("/updateUser")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void deleteUser() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = delete("/deleteUser/1")
                 .contentType(MediaType.APPLICATION_JSON);
@@ -133,20 +171,22 @@ public class UsersControllerTest extends BaseControllerTest{
     }
 
     @Test
-    @Ignore
+    public void deleteUserWrongPath() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = delete("/delete_user/1")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     public void getUserInfoOne() throws Exception {
         MockHttpServletRequestBuilder requestBuilder = get("/user/user-info/1");
         mockMvc.perform(requestBuilder)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", Matchers.equalTo("User One")))
-                .andExpect(jsonPath("$[0].location", Matchers.equalTo("Minsk")))
-                .andExpect(jsonPath("$[0].salary", Matchers.equalTo("1000")))
-                .andExpect(jsonPath("$[1].biography", Matchers.equalTo("Likes to code.")));
+                .andExpect(status().isUnauthorized());
 
     }
 
     @Test
-    @Ignore
     public void getUserInfoTwo() throws Exception {
         ChangeUserDto changeUserDto = new ChangeUserDto();
         changeUserDto.setBiography("One");
@@ -160,11 +200,7 @@ public class UsersControllerTest extends BaseControllerTest{
         MockHttpServletRequestBuilder requestBuilder = post("/user/user-info/save-changes")
                 .content(json);
         mockMvc.perform(requestBuilder)
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", Matchers.equalTo("User One")))
-                .andExpect(jsonPath("$[0].location", Matchers.equalTo("Minsk")))
-                .andExpect(jsonPath("$[0].salary", Matchers.equalTo("1000")))
-                .andExpect(jsonPath("$[1].biography", Matchers.equalTo("Likes to code.")));
+                .andExpect(status().isUnauthorized());
     }
 
 }

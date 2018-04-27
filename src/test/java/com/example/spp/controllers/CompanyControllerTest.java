@@ -1,6 +1,7 @@
 package com.example.spp.controllers;
 
 import com.example.spp.dto.AddNewCompanyDto;
+import com.example.spp.dto.AddNewItemDto;
 import com.example.spp.models.Company;
 import com.example.spp.repository.CompanyRepository;
 import com.example.spp.service.TestDBCompanyService;
@@ -65,6 +66,16 @@ public class CompanyControllerTest extends BaseControllerTest {
     }
 
     @Test
+    public void getCompaniesBadRequest() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = get("/getAllDataFromCompanies")
+                .param("_page", "test")
+                .param("_limit", "10")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void addNewCompany() throws Exception {
         AddNewCompanyDto addNewCompanyDto = new AddNewCompanyDto();
         addNewCompanyDto.setName("itransition");
@@ -78,6 +89,22 @@ public class CompanyControllerTest extends BaseControllerTest {
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.equalTo(true)));
+    }
+
+    @Test
+    public void addNewCompanyWrongContent() throws Exception {
+        AddNewItemDto addNewItemDto = new AddNewItemDto();
+        addNewItemDto.setName("savyshkin");
+        addNewItemDto.setCategory("milk");
+        addNewItemDto.setPrice(1000);
+        addNewItemDto.setId(1);
+
+        String json = mapper.writeValueAsString(addNewItemDto);
+        MockHttpServletRequestBuilder requestBuilder = post("/addNewCompany")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -101,5 +128,13 @@ public class CompanyControllerTest extends BaseControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteCompanyWrongPath() throws Exception {
+        MockHttpServletRequestBuilder requestBuilder = delete("/delete_company/1")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isUnauthorized());
     }
 }

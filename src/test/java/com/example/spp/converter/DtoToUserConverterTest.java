@@ -27,4 +27,61 @@ public class DtoToUserConverterTest {
         assertEquals(UserStatus.ACTIVE, user.getStatus());
     }
 
+    @Test
+    public void convertDtoToUserInversion() throws Exception {
+        AddNewUserDto dto = new AddNewUserDto();
+        dto.setEmail("some@email.com");
+        dto.setFullname("SomeName");
+        dto.setRole("ROLE_USER");
+        dto.setSalary(100);
+        dto.setStatus("ACTIVE");
+
+        User user = DtoToUserConverter.convertDtoToUser(dto);
+
+        assertNotEquals("SomeName", user.getEmail());
+        assertNotEquals("some@email.com", user.getFullname());
+    }
+
+    @Test
+    public void convertDtoToUserFailed() throws Exception {
+        AddNewUserDto dto = new AddNewUserDto();
+        dto.setEmail("some@email.com");
+        dto.setFullname("SomeName");
+        dto.setRole("ROLE_USER");
+        dto.setSalary(100);
+        dto.setStatus("ACTIVE");
+
+        User user = DtoToUserConverter.convertDtoToUser(dto);
+
+        assertNotEquals("", user.getEmail());
+        assertNotEquals("", user.getFullname());
+        assertNotEquals(0, user.getSalary());
+    }
+
+    @Test
+    public void convertDtoToUserWrongRole() throws Exception {
+        AddNewUserDto dto = new AddNewUserDto();
+        dto.setEmail("some@email.com");
+        dto.setFullname("SomeName");
+        dto.setRole("ROLE_USER");
+        dto.setSalary(100);
+        dto.setStatus("ACTIVE");
+
+        User user = DtoToUserConverter.convertDtoToUser(dto);
+        assertNotEquals(UserRole.ROLE_DRIVER, user.getRole());
+    }
+
+    @Test
+    public void convertDtoToUserNotInactive() throws Exception {
+        AddNewUserDto dto = new AddNewUserDto();
+        dto.setEmail("some@email.com");
+        dto.setFullname("SomeName");
+        dto.setRole("ROLE_USER");
+        dto.setSalary(100);
+        dto.setStatus("ACTIVE");
+
+        User user = DtoToUserConverter.convertDtoToUser(dto);
+
+        assertNotEquals(UserStatus.INACTIVE, user.getStatus());
+    }
 }
