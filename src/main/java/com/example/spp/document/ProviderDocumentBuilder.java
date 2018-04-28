@@ -4,9 +4,7 @@ import com.example.spp.document.csv.CsvBuilder;
 import com.example.spp.document.excel.ExcelBuilder;
 import com.example.spp.document.pdf.PdfBuilder;
 import com.example.spp.models.Company;
-import com.example.spp.models.Item;
 import com.example.spp.repository.CompanyRepository;
-import com.example.spp.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

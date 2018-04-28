@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/deleteUser/*", "/deleteItem/*", "/deleteOrder/*"};
     private static final String[] allowedUrlsForGet = new String[]{ "/getAllDataFromItems",  "/document/printListOfUsers/*",
             "/getAllDataFromUsers", "/getAllDataFromCompanies", "/getAllDataFromStorage",
-            "/document/printListOfItems/*", "/getAllDataFromOrders",
+            "/document/printListOfItems/*", "/getAllDataFromOrders", "/document/printTaxes/*",
             "/document/printListOfProviders/*", "/document/printDriversSchedule/*"};
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;

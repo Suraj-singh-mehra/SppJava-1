@@ -1,9 +1,6 @@
 package com.example.spp.controllers;
 
-import com.example.spp.document.DriversScheduleBuilder;
-import com.example.spp.document.EmployeeDocumentBuilder;
-import com.example.spp.document.ItemDocumentBuilder;
-import com.example.spp.document.ProviderDocumentBuilder;
+import com.example.spp.document.*;
 import com.example.spp.models.enums.DocumentFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,16 +22,19 @@ public class DocumentController {
     private final ItemDocumentBuilder itemDocumentBuilder;
     private final ProviderDocumentBuilder providerDocumentBuilder;
     private final DriversScheduleBuilder driversScheduleBuilder;
+    private final TaxesDocumentBuilder taxesDocumentBuilder;
 
     @Autowired
     public DocumentController(@Qualifier("employee_documents") EmployeeDocumentBuilder employeeDocumentBuilder,
                               @Qualifier("item_documents") ItemDocumentBuilder itemDocumentBuilder,
                               @Qualifier("driver_schedule_documents") DriversScheduleBuilder driversScheduleBuilder,
-                              @Qualifier("provider_documents") ProviderDocumentBuilder providerDocumentBuilder) {
+                              @Qualifier("provider_documents") ProviderDocumentBuilder providerDocumentBuilder,
+                              @Qualifier("taxes_documents") TaxesDocumentBuilder taxesDocumentBuilder) {
         this.employeeDocumentBuilder = employeeDocumentBuilder;
         this.itemDocumentBuilder = itemDocumentBuilder;
         this.providerDocumentBuilder = providerDocumentBuilder;
         this.driversScheduleBuilder = driversScheduleBuilder;
+        this.taxesDocumentBuilder = taxesDocumentBuilder;
     }
 
     @GetMapping(value = "/printListOfUsers/XLSX")
@@ -181,8 +181,39 @@ public class DocumentController {
         }
     }
 
-    @RequestMapping(value = "/printTaxes/{format}", method = RequestMethod.POST)
-    public void getTaxes(@PathVariable(name = "format") DocumentFormat format) {
+    @GetMapping(value = "/printTaxes/PDF")
+    public void getTaxesPdf(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.setContentType(PDF_CONTENT_TYPE);
+            taxesDocumentBuilder.generatePdfDocument(httpServletResponse.getOutputStream());
+        } catch (IOException e) {
+            System.out.println(ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    @GetMapping(value = "/printTaxes/XLSX")
+    public void getTaxesExcel(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.setContentType(EXCEL_CONTENT_TYPE);
+            taxesDocumentBuilder.generateExcelDocument(httpServletResponse.getOutputStream());
+        } catch (IOException e) {
+            System.out.println(ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping(value = "/printTaxes/CSV")
+    public void getTaxesCsv(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.setContentType(CSV_CONTENT_TYPE);
+            taxesDocumentBuilder.generateCsvDocument(httpServletResponse.getOutputStream());
+        } catch (IOException e) {
+            System.out.println(ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
