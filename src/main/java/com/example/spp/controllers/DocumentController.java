@@ -24,6 +24,7 @@ public class DocumentController {
     private final DriversScheduleBuilder driversScheduleBuilder;
     private final TaxesDocumentBuilder taxesDocumentBuilder;
     private final StorageDocumentBuilder storageDocumentBuilder;
+    private final OrdersDocumentBuilder ordersDocumentBuilder;
 
     @Autowired
     public DocumentController(@Qualifier("employee_documents") EmployeeDocumentBuilder employeeDocumentBuilder,
@@ -31,13 +32,15 @@ public class DocumentController {
                               @Qualifier("driver_schedule_documents") DriversScheduleBuilder driversScheduleBuilder,
                               @Qualifier("provider_documents") ProviderDocumentBuilder providerDocumentBuilder,
                               @Qualifier("taxes_documents") TaxesDocumentBuilder taxesDocumentBuilder,
-                              @Qualifier("storage_documents") StorageDocumentBuilder storageDocumentBuilder) {
+                              @Qualifier("storage_documents") StorageDocumentBuilder storageDocumentBuilder,
+                              @Qualifier("order_documents") OrdersDocumentBuilder ordersDocumentBuilder) {
         this.employeeDocumentBuilder = employeeDocumentBuilder;
         this.itemDocumentBuilder = itemDocumentBuilder;
         this.providerDocumentBuilder = providerDocumentBuilder;
         this.driversScheduleBuilder = driversScheduleBuilder;
         this.taxesDocumentBuilder = taxesDocumentBuilder;
         this.storageDocumentBuilder = storageDocumentBuilder;
+        this.ordersDocumentBuilder = ordersDocumentBuilder;
     }
 
     @GetMapping(value = "/printListOfUsers/XLSX")
@@ -248,6 +251,42 @@ public class DocumentController {
         try {
             httpServletResponse.setContentType(CSV_CONTENT_TYPE);
             storageDocumentBuilder.generateCsvDocument(httpServletResponse.getOutputStream());
+        } catch (IOException e) {
+            System.out.println(ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping(value = "/printListOfOrders/PDF")
+    public void printListOfOrdersPdf(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.setContentType(PDF_CONTENT_TYPE);
+            ordersDocumentBuilder.generatePdfDocument(httpServletResponse.getOutputStream());
+        } catch (IOException e) {
+            System.out.println(ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping(value = "/printListOfOrders/XLSX")
+    public void printListOfOrdersExcel(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.setContentType(EXCEL_CONTENT_TYPE);
+            ordersDocumentBuilder.generateExcelDocument(httpServletResponse.getOutputStream());
+        } catch (IOException e) {
+            System.out.println(ERROR_MESSAGE);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping(value = "/printListOfOrders/CSV")
+    public void printListOfOrdersCsv(HttpServletResponse httpServletResponse) {
+        try {
+            httpServletResponse.setContentType(CSV_CONTENT_TYPE);
+            ordersDocumentBuilder.generateCsvDocument(httpServletResponse.getOutputStream());
         } catch (IOException e) {
             System.out.println(ERROR_MESSAGE);
         } catch (Exception e) {
